@@ -1,7 +1,7 @@
 #include "random.h"
 
-uint32_t seed;
-uint32_t iter = 0;
+uint32_t _seed;
+uint32_t _iter = 0;
 
 uint32_t Randomizer(uint32_t x, uint32_t i, uint32_t m)
 {
@@ -10,10 +10,10 @@ uint32_t Randomizer(uint32_t x, uint32_t i, uint32_t m)
 
 uint32_t Rand(uint32_t m) 
 {
-  return Randomizer(seed, iter++, m);	
+  return Randomizer(_seed, _iter++, m);	
 }
 
 void iRand(uint32_t s)
 {
-	seed = s;
+	_seed = s;
 }
