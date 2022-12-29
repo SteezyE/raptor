@@ -15,5 +15,6 @@ uint32_t Rand(uint32_t m)
 
 void iRand(uint32_t s)
 {
+	_iter = 0;
 	_seed = s;
 }
