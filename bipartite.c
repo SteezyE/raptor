@@ -12,6 +12,7 @@
  *----------------------------------------------------------*/
 #include "bipartite.h"
 #include "galois.h"
+#include "random.h"
 #include <math.h>
 #include <string.h>
 static int is_prime(int number);
@@ -23,6 +24,7 @@ static int remove_from_list(struct node_list *list, int data);
 static void append_to_list(struct node_list *list, struct node *nd);
 
 // construct LDPC graph
+// TODO: use random function from rfc 5053 and not c lib
 int create_bipartite_graph(BP_graph *graph, int nleft, int nright)
 {
     int LDPC_SYS = nleft;
@@ -58,10 +60,10 @@ int create_bipartite_graph(BP_graph *graph, int nleft, int nright)
             for (j=0; j<LDPC_SYS; j++) {
                 int included = 1;
                 if (graph->binaryce == 1) {
-                    if (rand() % 2 == 0)
+                    if (Rand(2)  == 0)
                         included = 0;
                 } else {
-                    if (rand() % 256 == 0)
+                    if (Rand(256)  == 0)
                         included = 0;
                 }
                 if (included) {
@@ -135,7 +137,7 @@ static int include_left_node(int l_index, int r_index, BP_graph *graph)
     if (graph->binaryce == 1) {
         ce = 1;
     } else {
-        ce = (GF_ELEMENT) (rand() % 255 + 1); // Value range: [1-255]
+        ce = (GF_ELEMENT) (Rand(255)  + 1); // Value range: [1-255]
     }
     // Record neighbor of a right-side node
     NBR_node *nb = calloc(1, sizeof(NBR_node));

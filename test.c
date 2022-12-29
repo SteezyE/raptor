@@ -10,11 +10,11 @@
 char usage[] = "usage: ./raptorTest snum nhop epsils\n\
                        snum    - number of source packets\n\
                        nhop    - number of hops\n\
-                       epsils - erasure probability of each hop (one number if all hops are the same)\n";
+                       epsils  - erasure probability of each hop (one number if all hops are the same)\n";
 
 int main(int argc, char *argv[])
 {
-    if (argc <4 || (argc !=4 && argc != atoi(argv[2])+3)) {
+    if (argc < 4 || (argc != 4 && argc != atoi(argv[2])+3)) {
         printf("%s\n", usage);
         exit(1);
     }

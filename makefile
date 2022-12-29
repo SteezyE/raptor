@@ -3,7 +3,7 @@
 
 CC = gcc
 CFLAGS = -std=c99 -O3 -lm
-RAPTOR = encoder.o galois.o bipartite.o decoder.o pivoting.o gaussian.o
+RAPTOR = encoder.o galois.o bipartite.o decoder.o pivoting.o gaussian.o random.o
 
 raptorTest: $(RAPTOR) test.c
 	$(CC) -o $@ $^ $(CFLAGS)

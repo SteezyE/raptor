@@ -1,6 +1,7 @@
 #include <string.h>
 #include "raptor.h"
 #include "galois.h"
+#include "random.h"
 #include "bipartite.h"
 
 static double dist[40];    // degree distribution for LT encoding
