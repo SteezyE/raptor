@@ -16,7 +16,7 @@ struct enc_context *create_encoder_context(GF_ELEMENT *buf, int snum, int pktsiz
     struct enc_context *sc = malloc(sizeof(struct enc_context));
     sc->snum  = snum;
     sc->psize = pktsize;
-    sc->cnum  = 13;            // use fixed number for now
+    sc->cnum  = snum * 0.5;
     sc->count = 0;
 
     construct_GF();
