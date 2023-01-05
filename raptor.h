@@ -1,3 +1,6 @@
+#ifndef __RAPTOR_H
+#define __RAPTOR_H
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -71,4 +74,5 @@ void free_decoder_context(struct dec_context *dc);
 
 #ifdef __cplusplus
 }
+#endif
 #endif
