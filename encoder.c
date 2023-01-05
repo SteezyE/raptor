@@ -16,29 +16,32 @@ struct enc_context *create_encoder_context(GF_ELEMENT *buf, int snum, int pktsiz
     struct enc_context *sc = malloc(sizeof(struct enc_context));
     sc->snum  = snum;
     sc->psize = pktsize;
-    sc->cnum  = snum * 0.5;
+    sc->cnum  = snum * 0.5; //TODO: should this be hardcoded?
     sc->count = 0;
 
     construct_GF();
 
-    // load data
-    int i;
-    sc->pp = calloc(sc->snum+sc->cnum, sizeof(GF_ELEMENT*));
-    for (i=0; i<sc->snum; i++) {
-        sc->pp[i] = calloc(sc->psize, sizeof(GF_ELEMENT));
-        memcpy(sc->pp[i], buf, sc->psize*sizeof(GF_ELEMENT));
-        buf += sc->psize;
-    }
+    if(buf){// load data
+        int i;
+        sc->pp = calloc(sc->snum+sc->cnum, sizeof(GF_ELEMENT*));
+        for (i=0; i<sc->snum; i++) {
+            sc->pp[i] = calloc(sc->psize, sizeof(GF_ELEMENT));
+            memcpy(sc->pp[i], buf, sc->psize*sizeof(GF_ELEMENT));
+            buf += sc->psize;
+        }
 
-    // allocate parity-check packet space
-    for (i=0; i<sc->cnum; i++)
-        sc->pp[sc->snum+i] = calloc(sc->psize, sizeof(GF_ELEMENT));
+        // allocate parity-check packet space
+        for (i=0; i<sc->cnum; i++)
+            sc->pp[sc->snum+i] = calloc(sc->psize, sizeof(GF_ELEMENT));
+    }
     
     // precoding
     sc->graph = malloc(sizeof(BP_graph));
     sc->graph->binaryce = 0;                   // binary or non-binary precoding
     create_bipartite_graph(sc->graph, sc->snum, sc->cnum); 
-    precoding(sc);
+    if (buf) {
+        precoding(sc);
+    }
 
     // configure LT degree distribution
     // ref. R10 code
