@@ -2,8 +2,6 @@
 #include "galois.h"
 #include "bipartite.h"
 #include "raptor.h"
-static int apply_parity_check_matrix(struct dec_context *dc);
-static void finish_recovering_BD(struct dec_context *dc);
 
 static int apply_precode_matrix_and_pivot(struct dec_context *dc);
 static void diag_decoding_matrix(struct dec_context *dc);
