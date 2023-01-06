@@ -1,6 +1,7 @@
 #include <string.h>
 #include "raptor.h"
 #include "galois.h"
+#include "random.h"
 #include "bipartite.h"
 
 static double dist[40];    // degree distribution for LT encoding
@@ -11,8 +12,9 @@ static int draw_random_degree(void);
 static void get_random_unique_numbers(int ids[], int n, int ub);
 
 // Create an encoder packet from a buf of data
-struct enc_context *create_encoder_context(GF_ELEMENT *buf, int snum, int pktsize)
+struct enc_context *create_encoder_context(GF_ELEMENT *buf, int snum, int pktsize, int seed)
 {
+    iRand(seed);
     struct enc_context *sc = malloc(sizeof(struct enc_context));
     sc->snum  = snum;
     sc->psize = pktsize;

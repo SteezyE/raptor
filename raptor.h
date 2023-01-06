@@ -57,7 +57,7 @@ struct LT_buffer {
 };
 
 // Encoder
-struct enc_context *create_encoder_context(GF_ELEMENT *buf, int snum, int pktsize);
+struct enc_context *create_encoder_context(GF_ELEMENT *buf, int snum, int pktsize, int seed);
 
 void free_encoder_context(struct enc_context *sc);
 

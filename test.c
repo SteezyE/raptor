@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     close(rnd);
 
     // create encoder context
-    struct enc_context *sc = create_encoder_context(buf, snum, psize);
+    struct enc_context *sc = create_encoder_context(buf, snum, psize, rand());
     // create buffers
     struct LT_buffer *rbuf = calloc(nhop-1, sizeof(struct LT_buffer));
     for (i=0; i<nhop-1; i++) {
