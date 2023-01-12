@@ -3,13 +3,12 @@
 #include "galois.h"
 #include "random.h"
 #include "bipartite.h"
+#include "misc.h"
 
 static double dist[40];    // degree distribution for LT encoding
 
 static int compare_int(const void *elem1, const void *elem2);
 static void precoding(struct enc_context *sc);
-static int draw_random_degree(void);
-static void get_random_unique_numbers(int ids[], int n, int ub);
 
 // Create an encoder packet from a buf of data
 struct enc_context *create_encoder_context(GF_ELEMENT *buf, int snum, int pktsize, int seed)
@@ -18,7 +17,7 @@ struct enc_context *create_encoder_context(GF_ELEMENT *buf, int snum, int pktsiz
     struct enc_context *sc = malloc(sizeof(struct enc_context));
     sc->snum  = snum;
     sc->psize = pktsize;
-    sc->cnum  = snum * 0.5; //TODO: should this be hardcoded?
+    sc->cnum  = snum * 0.5; //TODO: cnum may actually be "S" from the RFC; we can calculate this
     sc->count = 0;
 
     construct_GF();
@@ -79,6 +78,7 @@ struct LT_packet *encode_LT_packet(struct enc_context *sc)
 {
     struct LT_packet *pkt = calloc(1, sizeof(struct LT_packet));
     pkt->id = sc->count;
+    srand(pkt->id);
     int deg = draw_random_degree();
     if (deg > sc->snum+sc->cnum) {
         deg = sc->snum+sc->cnum;        // for small number of packets, the largest degree might be too large
@@ -138,7 +138,7 @@ void free_encoder_context(struct enc_context *sc)
     return;
 }
 
-static int draw_random_degree(void)
+int draw_random_degree(void)
 {
     int ds = 1;
     int dm = 40;
@@ -165,7 +165,7 @@ static int draw_random_degree(void)
 
 // generate a number of n<ub unique random numbers within the range of [0, ub-1]
 // using Fisher-Yates shuffle method
-static void get_random_unique_numbers(int ids[], int n, int ub)
+void get_random_unique_numbers(int ids[], int n, int ub)
 {
 	int init_array[ub];
 	int i, j;

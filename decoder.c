@@ -2,6 +2,7 @@
 #include "galois.h"
 #include "bipartite.h"
 #include "raptor.h"
+#include "misc.h"
 
 static int apply_precode_matrix_and_pivot(struct dec_context *dc);
 static void diag_decoding_matrix(struct dec_context *dc);
@@ -47,6 +48,16 @@ struct dec_context *create_decoder_context(struct enc_context *sc)
 void process_LT_packet(struct dec_context *dc, struct LT_packet *pkt)
 {
     // dc->received += 1;
+
+    srand(pkt->id);
+    int deg = draw_random_degree();
+    if (deg > dc->sc->snum + dc->sc->cnum) {
+        deg = dc->sc->snum + dc->sc->cnum;        // for small number of packets, the largest degree might be too large
+    }
+    pkt->deg = deg;
+    pkt->sid = calloc(pkt->deg, sizeof(int));
+    // draw source packet id
+    get_random_unique_numbers(pkt->sid, pkt->deg, dc->sc->snum+dc->sc->cnum);
 
     int i, j, k;
     GF_ELEMENT quotient;
