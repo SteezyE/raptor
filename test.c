@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     int i, j;
     // read network configurations
     int snum = atoi(argv[1]);
-    int psize = 200;
+    int psize = 140;
     int nhop = atoi(argv[2]);
     double *pe = calloc(nhop, sizeof(double));
     for (i=0; i<nhop; i++) {
@@ -99,5 +99,7 @@ int main(int argc, char *argv[])
     free_decoder_context(dc);
     free(buf);
     free_encoder_context(sc);
+    free(rbuf);
+    free(pe);
     return 0;
 }
