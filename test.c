@@ -98,7 +98,6 @@ int main(int argc, char *argv[])
     printf("\npktsize: %d nhop: %d snum: %d cnum: %d received: %d nuse: %d \n", psize, nhop, snum, sc->cnum, dc->received, nuse);
     free_decoder_context(dc);
     free(buf);
-    free_encoder_context(sc);
     free(rbuf);
     free(pe);
     return 0;
