@@ -4,6 +4,7 @@
 #include "random.h"
 #include "bipartite.h"
 #include "misc.h"
+#include "assert.h"
 
 static double dist[40];    // degree distribution for LT encoding
 
@@ -11,8 +12,22 @@ static int compare_int(const void *elem1, const void *elem2);
 static void precoding(struct enc_context *sc);
 
 // Create an encoder packet from a buf of data
-struct enc_context *create_encoder_context(GF_ELEMENT *buf, int snum, int pktsize, int seed)
+struct enc_context *create_encoder_context(GF_ELEMENT *buf, int snum, int pktsize, int len, int seed)
 {
+    assert(sizeof(GF_ELEMENT) == 1); // basic sanity check
+
+    if(len > snum * pktsize){
+        return 0;
+    }
+
+    // The final block will have extra symbols, and the final packet (carrying the final symbol) may also be smaller than the symbol size
+    int num_actual_symbols = len / pktsize;
+    if (len % pktsize){
+        num_actual_symbols++;
+    }
+    // above is equivalent to ceil(len / symbol size)
+    int final_packet_size = len - pktsize*(num_actual_symbols-1);
+
     iRand(seed);
     struct enc_context *sc = malloc(sizeof(struct enc_context));
     sc->snum  = snum;
@@ -22,14 +37,19 @@ struct enc_context *create_encoder_context(GF_ELEMENT *buf, int snum, int pktsiz
 
     construct_GF();
 
-    if(buf){// load data
+    if(buf){ // load data
         int i;
         sc->pp = calloc(sc->snum+sc->cnum, sizeof(GF_ELEMENT*));
         for (i=0; i<sc->snum; i++) {
-            sc->pp[i] = calloc(sc->psize, sizeof(GF_ELEMENT));
-            memcpy(sc->pp[i], buf, sc->psize*sizeof(GF_ELEMENT));
-            buf += sc->psize;
+            sc->pp[i] = calloc(sc->psize, sizeof(GF_ELEMENT)); // always calloc the symbols
+            if (i < num_actual_symbols-1){
+                memcpy(sc->pp[i], buf, sc->psize*sizeof(GF_ELEMENT)); // only write to them if theres something left to write
+                buf += sc->psize;
+            } else if (i == num_actual_symbols-1) {
+                memcpy(sc->pp[i], buf, final_packet_size);
+            }
         }
+
 
         // allocate parity-check packet space
         for (i=0; i<sc->cnum; i++)
