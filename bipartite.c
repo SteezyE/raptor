@@ -127,7 +127,7 @@ failure:
 static int include_left_node(int l_index, int r_index, BP_graph *graph)
 {
     // Skip if the two nodes are already neighbors
-    // Note: a good ``bipartitin'' algorithm should not get into such 
+    // Note: a good ``bipartition'' algorithm should not get into such
     // trouble. This is included just in case we needed to test/experiment
     // different bipartite creating methods.
     if (exist_in_list(graph->l_nbrs_of_r[r_index], l_index))
@@ -150,7 +150,7 @@ static int include_left_node(int l_index, int r_index, BP_graph *graph)
 
     // Also neighbour of the left-side node
     NBR_node *check_nb = calloc(1, sizeof(NBR_node));
-    if (nb == NULL)
+    if (check_nb == NULL)
         return -1;
     check_nb->data = r_index;
     check_nb->ce   = ce;

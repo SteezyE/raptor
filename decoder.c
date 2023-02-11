@@ -189,6 +189,7 @@ static void diag_decoding_matrix(struct dec_context *dc)
     }
     dc->operations += bs_ops;
     dc->finished = 1;
+    printf("Decoding finished!");
 }
 
 void free_decoder_context(struct dec_context *dc)

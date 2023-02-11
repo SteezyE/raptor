@@ -32,7 +32,7 @@ struct enc_context *create_encoder_context(GF_ELEMENT *buf, int snum, int pktsiz
     struct enc_context *sc = malloc(sizeof(struct enc_context));
     sc->snum  = snum;
     sc->psize = pktsize;
-    sc->cnum  = snum * 0.15 > 0 ? snum * 0.15 : snum + 1; //TODO: cnum may actually be "S" from the RFC; we can calculate this
+    sc->cnum  = snum * 0.15 >= 1 ? snum * 0.15 : 1; //TODO: cnum may actually be "S" from the RFC; we can calculate this
     sc->count = 0;
 
     construct_GF();
@@ -59,7 +59,11 @@ struct enc_context *create_encoder_context(GF_ELEMENT *buf, int snum, int pktsiz
     // precoding
     sc->graph = malloc(sizeof(BP_graph));
     sc->graph->binaryce = 0;                   // binary or non-binary precoding
-    create_bipartite_graph(sc->graph, sc->snum, sc->cnum); 
+    if(create_bipartite_graph(sc->graph, sc->snum, sc->cnum) == -1) {
+        free(sc->graph);
+        free(sc);
+        return 0;
+    }
     if (buf) {
         precoding(sc);
     }

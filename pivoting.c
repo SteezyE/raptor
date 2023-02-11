@@ -914,7 +914,7 @@ static int inactivation_pivoting(int nrow, int ncolA, GF_ELEMENT **A, ssList *Ro
     for (i=0; i<ncolA; i++) {
         if (col_state[i] == 1) {
             // find an arbitray row that has not been selected
-            int j_candidate;
+            int j_candidate = 0;
             for (j=0; j<nrow; j++) {
                 if (row_counts[j] != -1) {
                     j_candidate = j;
