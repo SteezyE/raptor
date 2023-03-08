@@ -221,7 +221,8 @@ void free_decoder_context(struct dec_context *dc)
         free(dc->ctoo_r);
     if (dc->ctoo_c != NULL)
         free(dc->ctoo_c);
-    free_encoder_context(dc->sc);
+    free_bipartite_graph(dc->sc->graph); // only part of the encoder we use
+    free(dc->sc);
     free(dc);
     dc = NULL;
     return;
